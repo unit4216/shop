@@ -1,0 +1,4 @@
+-run "npm init" in local folder of project
+-install any relevant packages with "npm install --save [package name]" in local folder of project
+-run "node [node js filename] in local folder to start serving (e.g. "node app.js"
+-visit localhost:[port] (e.g. localhost:3000) to see site

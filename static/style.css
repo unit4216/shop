@@ -1,0 +1,159 @@
+/* Navbar brand */
+.navbar-brand {
+    font-family: Outfit;
+    font-weight: 500;
+    font-size: 50px !important;
+    margin-left: 50px;
+}
+
+/* Navbar */
+.navbar {
+    border-bottom: 1px solid rgb(180, 180, 180);
+}
+
+/* Shop link in navbar on Admin page */
+.nav-link {
+    font-family: Outfit;
+    font-weight: 200;
+    color:rgb(124, 124, 124) !important;
+    margin-top: 10px;
+    font-size: 25px;
+    margin-right: 100px;
+    font-style: normal !important;
+}
+
+/* Hover on links in Nav bar */
+.nav-link:hover {
+    color:rgb(170, 170, 170) !important;
+}
+
+/* Add product button */
+#addProduct {
+    margin-right:200px;
+    padding-top:15px;
+    display:inline;
+    float:right !important;
+    
+}
+
+/* Product boxes/divs */
+.btn.btn-light {
+    height:300px;
+    width: 300px;
+    border: none;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    padding: 0px;
+    font-family: Outfit;
+    font-weight: 200;
+    position: relative;
+    
+}
+
+/*Text inside product box */
+.btn.btn-light span {
+    background:rgba(131, 131, 131, 0.411);
+    display:block;
+    top: 0px;
+    position: absolute;
+    opacity: 1;
+    color:white;
+    height: 30px;
+    width: 300px;
+    border-radius: 1.5em 1.5em 0em 0em;
+    transition: 700ms;
+    
+}
+
+/*content that changes properties when hovering over product box */
+.hoverContent {
+    opacity:0;
+    padding: 20px;
+}
+
+
+/* Product box itself on hover 
+.btn.btn-light:hover {
+    border: 2px black !important;
+}
+*/
+
+/* Changes the opacity on .hoverContent when hovering over .btn-.btn-light (product box) */
+.btn.btn-light:hover .hoverContent {
+    opacity:1 !important;
+    transition-duration: 1s;
+}
+
+/* Product content on hover */
+.btn:hover span {
+    display:block;
+    color:white;
+    background-color:rgba(131, 131, 131, 0.411);
+    opacity: 1;
+    height: 300px;
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    padding: 0px !important;
+    border-radius: 25px;
+    
+}
+
+/* Photo in modal on user side*/
+.modalPhoto {
+    width:100%;
+    padding: 0 !important;
+    border-radius: 10px 0px 0px 10px !important;
+}
+
+/* Modal body settings */
+.modal-body.User {
+    padding: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Modal content settings */
+.modal-content {
+    border-radius: 10px !important;
+    border: none !important;
+}
+
+/* Modal content (name/desc/price) */
+.modalProductName{
+    font-family: Outfit;
+    font-weight: 400;
+    font-size: 30px;
+    padding-left: 10px;
+    padding-right: 40px;
+}
+
+.modalProductDesc{
+    font-family: Outfit;
+    font-weight: 200;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 40px;
+
+}
+
+.modalProductPrice{
+    font-family: Outfit;
+    font-weight: 400;
+    font-size: 50px;
+    padding-left: 10px;
+    padding-right: 40px;
+
+}
+
+/* Add to Cart button on modal on shop end */
+.addProductToCart {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#myCartHeader {
+    font-family: Outfit;
+}
