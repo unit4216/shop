@@ -37,7 +37,7 @@ app.get('/admin.html', (request, response) => {
 
 //Display Products route
 app.post('/display', (request, response) => {
-  console.log('display successful');
+  //console.log('display successful');
 
   //displayProducts(); 
 
@@ -50,13 +50,14 @@ app.post('/display', (request, response) => {
           throw err;
         }
         rows.forEach((row) => {products.push(row);}); 
-        response.send(products); //have to send response inside this function or else it doesn't work properly and you have to reload page    
+        //console.log(products)
+        response.send(products); //have to send callback response inside this function or else it doesn't work properly and you have to reload page for updated Products JSON    
   });
 
-  console.log('this is whats getting sent');
-  console.log(products);
+  //console.log('this is whats getting sent');
+  //console.log(products);
 
-  console.log(request.body);
+  //console.log(request.body);
 
   //response.redirect('/admin.html'); //redirects back to same page so that there is no redirect - possibly unnecessary and prevents sending of more data
   //console.log('this is whats getting sent')
@@ -74,7 +75,7 @@ app.post('/addProduct', (request, response) => {
   addProduct(productToAdd);
 
   //response.redirect('/admin.html'); //redirects back to same page so that there is no redirect - possibly unnecessary and prevents sending of more data
-  console.log(request.body);
+  //console.log(request.body);
   
 });
 
@@ -90,7 +91,7 @@ app.post('/deleteProduct', (request, response) => {
   deleteProduct(productToDeleteID);
 
   //response.redirect('/admin.html'); //redirects back to same page so that there is no redirect - possibly unnecessary and prevents sending of more data
-  console.log(productToDeleteID);
+  //console.log(productToDeleteID);
   
 });
 
@@ -104,8 +105,8 @@ app.post('/editProduct', (request, response) => {
   editProduct(productToEdit);
 
   //response.redirect('/admin.html'); //redirects back to same page so that there is no redirect - possibly unnecessary and prevents sending of more data
-  console.log('output of edit route')
-  console.log(productToEdit);
+  //console.log('output of edit route')
+  //console.log(productToEdit);
 
   //displayProducts();
   
@@ -143,6 +144,9 @@ function addProduct(p){
   prodDesc = '"'+p.description+'"';
   prodPhoto = '"'+p.photo_url+'"';
 
+  //db.run(`INSERT INTO shop_table (name,description,price,photo_url) VALUES (?,?,?,?)`,prodName,prodDesc,prodPrice,prodPhoto);
+
+  
   add_product = `INSERT INTO shop_table (name,description,price,photo_url) VALUES (${prodName},${prodDesc},${prodPrice},${prodPhoto})`
     
   db.all(add_product,[],(err, rows ) => {
@@ -150,7 +154,7 @@ function addProduct(p){
           throw err;
         }
         rows.forEach((row) => {
-          console.log(row);
+          //console.log(row);
         });
   });
 
@@ -174,8 +178,8 @@ function displayProducts(){
           //console.log(row);
           products.push(row);
         });      
-    console.log('output of display func');
-    console.log(products);
+    //console.log('output of display func');
+    //console.log(products);
   });
   //return db.all();
 }
@@ -190,7 +194,7 @@ function deleteProduct(id){
           throw err;
         }
         rows.forEach((row) => {
-          console.log(row);
+          //console.log(row);
         });
       });        
 
@@ -206,11 +210,10 @@ function editProduct(product){
   var id = product.product_id;
 
   //sanitize inputs
-  //console.log(name)
-  //name=name.replace('"','""');
+  
+  db.run(`UPDATE shop_table SET name = ?,price = ?,photo_url = ?,description = ? WHERE product_id = ${id}`, name, price, url, desc);
 
-  //desc=desc.split('"').join('""');
-
+  /*
   const editProduct = `UPDATE shop_table SET name = "${name}",price = "${price}",photo_url = "${url}",description = "${desc}" WHERE product_id = ${id};`
 
   db.all(editProduct,[],(err, rows ) => {
@@ -218,10 +221,12 @@ function editProduct(product){
           throw err;
         }
         rows.forEach((row) => {
-          console.log('edit func output');
-          console.log(row);
+          //console.log('edit func output');
+          //console.log(row);
         });
-      });        
+      });     
+      
+  */
 
 }
 

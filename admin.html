@@ -225,16 +225,18 @@
             productsHTML = ''
             for (let i = 0; i < productsObject.length; i++) {
                 var productName = JSON.stringify(productsObject[i].name);
-                    var productNameNoQuotes = productName.substring(1, productName.length-1);
+                    var productNameNoQuotes = productName.substring(1, productName.length-1); //removes quotes from string
                 var productPrice = JSON.stringify(productsObject[i].price);
-                    var productPriceNoQuotes = productPrice.substring(1, productPrice.length-1);
+                    var productPriceNoQuotes = productPrice.substring(1, productPrice.length-1); 
                 var productDesc = JSON.stringify(productsObject[i].description);
-                    var productDesc = productDesc.substring(1, productDesc.length-1); //removes quotes from string
+                    productDesc = productDesc.substring(1, productDesc.length-1); 
+                    productDesc = productDesc.replaceAll('\\n', '&#13;'); //replace newlines with HTML newline code for textarea
+                var hoverDesc = productDesc.replaceAll('&#13;','<br/>') //newline code doesn't work on hover so it must be replaced with <br/>
                 var productPhoto = JSON.stringify(productsObject[i].photo_url);
                 var productID = JSON.stringify(productsObject[i].product_id)
 
                 productsHTML = productsHTML.concat(' ', `
-                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>#${productID} - ${productNameNoQuotes}<br><br><div class='hoverContent'>${productDesc}<br><br>$${productPriceNoQuotes}</div></span></button>
+                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>#${productID} - ${productNameNoQuotes}<br><br><div class='hoverContent'>${hoverDesc}<br><br>$${productPriceNoQuotes}</div></span></button>
 
                 <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="editProductLabel${productID}" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -296,7 +298,6 @@
         </div>
 
 
-       
 
 
 
