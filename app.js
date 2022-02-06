@@ -139,14 +139,14 @@ db.all(create_table,[],(err, rows ) => {
 
 function addProduct(p){
 
-  prodName = '"'+p.name+'"';
-  prodPrice = '"'+p.price+'"';
-  prodDesc = '"'+p.description+'"';
-  prodPhoto = '"'+p.photo_url+'"';
+  prodName = p.name;
+  prodPrice = p.price;
+  prodDesc = p.description;
+  prodPhoto = p.photo_url;
 
-  //db.run(`INSERT INTO shop_table (name,description,price,photo_url) VALUES (?,?,?,?)`,prodName,prodDesc,prodPrice,prodPhoto);
+  db.run(`INSERT INTO shop_table (name,description,price,photo_url) VALUES (?,?,?,?)`,prodName,prodDesc,prodPrice,prodPhoto);
 
-  
+  /*
   add_product = `INSERT INTO shop_table (name,description,price,photo_url) VALUES (${prodName},${prodDesc},${prodPrice},${prodPhoto})`
     
   db.all(add_product,[],(err, rows ) => {
@@ -156,7 +156,7 @@ function addProduct(p){
         rows.forEach((row) => {
           //console.log(row);
         });
-  });
+  });*/
 
 }
 
