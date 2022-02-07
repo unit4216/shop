@@ -303,8 +303,8 @@
                     <div style='font-family:Outfit;font-weight:200'>
                         <div style='display:inline-block'>${myCartProdName}</div> 
                         <div style='display:inline-block;position:absolute;right:200px;font-size: 12px'><a href='#' onclick=updateQty(${myCartProdID})>Update</a></div>
-                        <div style='display:inline-block;position:absolute;right:140px'>
-                            <input type='text' class='form-control' style='width:50px;' value='${myCartProdQuantity}' id='changeQty${myCartProdID}'></input>
+                        <div style='display:inline-block;position:absolute;right:120px'>
+                            <input type='number' class='form-control qty' style='width:70px;' value='${myCartProdQuantity}' id='changeQty${myCartProdID}' min='1' max='99'></input>
                         </div> 
                         <div style='display:inline-block;position:absolute;left:392px'> x $${myCartProdPrice}</div>
                         <a href='#' onclick=deleteProduct(${myCartProdID})><img src='trash.svg' height=18 width=18 style='float:right'></a>
@@ -399,6 +399,7 @@
 
         function updateQty(id){
 
+        
             //gets new qty from input box
             var qtyToChange = document.getElementById(`changeQty${id}`).value;
 
@@ -414,6 +415,7 @@
 
             //set updated myCart object to localStorage
             localStorage.setItem("myCart", JSON.stringify(myCart));
+            
 
         }
 
