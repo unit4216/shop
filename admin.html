@@ -69,41 +69,81 @@
                         <form method='post' id='addProductForm'>
                             <label for="productName">Product Name</label>
                                 <input type='text' class='form-control' id='productName' maxlength='25'></input>
+                                <div id='nameInvalid' style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productDescription">Product Description</label>
                                 <textarea class='form-control' id='productDescription' rows='3' maxlength='200'></textarea>
+                                <div id='descInvalid' style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productPrice">Product Price</label>
                                 <input type='text' class='form-control' id='productPrice' maxlength='10'></input>
+                                <div id='priceInvalid' style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productImageURL">Product Image URL</label>
                                 <input type='text' class='form-control' id='productImageURL' maxlength='200'></input>
+                                <div id='urlInvalid' style='visibility:hidden;color: red'></div>
                                 <br>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" id='addProductFormButton'>Add Product</button>
+                        <button type="button" class="btn btn-primary" id='addProductFormButton'>Add Product</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        
-
-        <!--only functioning method so far involves POST form below and app.post handler in JS file
-        <form method='post' action='/function'>
-            <button type='submit'>Test</button>
-        </form>
-        -->
-
-        
 
 
         <script>
 
             //AJAX call to Edit Product (requires doc.ready)
             $(document).ready(function($) {
+
+                function validateInput(pN,pD,pP,pIU,nameSelector,descSelector,priceSelector,urlSelector){
+
+                    //checks for empty name field or presence of backslash
+                    if(pN == '' | pN.includes('\\')==true){
+
+                        if(pN==''){
+                            document.getElementById(nameSelector).style.visibility = "visible";
+                            document.getElementById(nameSelector).innerHTML = 'Name cannot be empty.';
+                        }
+
+                        else if(pN.includes('\\')==true){
+                            document.getElementById(nameSelector).style.visibility = "visible";
+                            document.getElementById(nameSelector).innerHTML = 'Invalid character: \\';
+                        }
+
+                        } else{
+                        //this resets the invalid message in case this field is fixed but there are other errors present on form
+                        document.getElementById(nameSelector).style.visibility = "hidden";  
+                        }  
+
+                    //checks for presence of backslash
+                    if(pD.includes('\\')==true){
+                        document.getElementById(descSelector).style.visibility = "visible";
+                        document.getElementById(descSelector).innerHTML = 'Invalid character: \\';
+                    } else{
+                        document.getElementById(descSelector).style.visibility = "hidden";
+                    }
+
+                    //checks if price can be parsed as number but not whether the field is populated (i.e. price can be empty)
+                    if(isNaN(parseFloat(pP)) && pP != ''){
+                        document.getElementById(priceSelector).style.visibility = "visible";
+                        document.getElementById(priceSelector).innerHTML = 'Price must be a number.';
+                    } else{
+                        document.getElementById(priceSelector).style.visibility = "hidden";
+                    }
+
+                    //checks for presence of single quote, double quote, or backslash in URL
+                    if(pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
+                        document.getElementById(urlSelector).style.visibility = "visible";
+                        document.getElementById(urlSelector).innerHTML = 'Invalid character in URL.';
+                    } else {
+                        document.getElementById(urlSelector).style.visibility = "hidden";
+                    }
+                    
+                }
                 
                 document.body.addEventListener('click', e => {
                         if (e.target.className === 'btn btn-primary editProductFormButton'){
@@ -118,52 +158,10 @@
                             var pIU = document.getElementById(`editProductImageURL${id}`).value 
                             var productToEdit = {product_id: id,name: pN, description: pD, price: pP, photo_url: pIU}
 
+
                             //input validation
-
                             if(pN == '' | (isNaN(parseFloat(pP)) && pP != '') | pN.includes('\\')==true | pD.includes('\\')==true | pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
-
-                                //checks for empty name field or presence of backslash
-                                if(pN == '' | pN.includes('\\')==true){
-
-                                    if(pN==''){
-                                        document.getElementById(`nameInvalid${id}`).style.visibility = "visible";
-                                        document.getElementById(`nameInvalid${id}`).innerHTML = 'Name cannot be empty.';
-                                    }
-
-                                    else if(pN.includes('\\')==true){
-                                        document.getElementById(`nameInvalid${id}`).style.visibility = "visible";
-                                        document.getElementById(`nameInvalid${id}`).innerHTML = 'Invalid character: \\';
-                                    }
-                                    
-                                } else{
-                                    //this resets the invalid message in case this field is fixed but there are other errors present on form
-                                    document.getElementById(`nameInvalid${id}`).style.visibility = "hidden";  
-                                }  
-
-                                //checks for presence of backslash
-                                if(pD.includes('\\')==true){
-                                    document.getElementById(`descInvalid${id}`).style.visibility = "visible";
-                                    document.getElementById(`descInvalid${id}`).innerHTML = 'Invalid character: \\';
-                                } else{
-                                    document.getElementById(`descInvalid${id}`).style.visibility = "hidden";
-                                }
-
-                                //checks if price can be parsed as number but not whether the field is populated (i.e. price can be empty)
-                                if(isNaN(parseFloat(pP)) && pP != ''){
-                                    document.getElementById(`priceInvalid${id}`).style.visibility = "visible";
-                                    document.getElementById(`priceInvalid${id}`).innerHTML = 'Price must be a number.';
-                                } else{
-                                    document.getElementById(`priceInvalid${id}`).style.visibility = "hidden";
-                                }
-
-                                //checks for presence of single quote, double quote, or backslash in URL
-                                if(pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
-                                    document.getElementById(`urlInvalid${id}`).style.visibility = "visible";
-                                    document.getElementById(`urlInvalid${id}`).innerHTML = 'Invalid character in URL.';
-                                } else {
-                                    document.getElementById(`urlInvalid${id}`).style.visibility = "hidden";
-                                }
-                            
+                                validateInput(pN,pD,pP,pIU,`nameInvalid${id}`,`descInvalid${id}`,`priceInvalid${id}`,`urlInvalid${id}`)
                                 return;
                             }
 
@@ -205,16 +203,36 @@
                             var pIU = document.getElementById('productImageURL').value 
                             var productToAdd = {name: pN, description: pD, price: pP, photo_url: pIU}
 
-                            $.ajax({
-                                url: '/addProduct',
-                                data: productToAdd,
-                                type: 'POST',
-                                success: function(data){
-                                    console.log(data);
-                                    displayAll();
-                                    //location.reload();
+                            //input validation
+                            if(pN == '' | (isNaN(parseFloat(pP)) && pP != '') | pN.includes('\\')==true | pD.includes('\\')==true | pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
+                                validateInput(pN,pD,pP,pIU,`nameInvalid`,`descInvalid`,`priceInvalid`,`urlInvalid`)
+                                return;
+                            }
+
+
+                            else{
+
+                                //dismiss modal
+                                $(`#addProductModal`).modal('hide'); 
+
+                                //convert price to float and round to 2 decimal places if necessary. 
+                                var modPrice = parseFloat(pP);
+                                modPrice = modPrice.toFixed(2);
+                                if(modPrice != 'NaN'){                  //only pushes modified price to object if price != null
+                                    productToAdd.price= modPrice;
                                 }
-                            });
+
+                                $.ajax({
+                                    url: '/addProduct',
+                                    data: productToAdd,
+                                    type: 'POST',
+                                    success: function(data){
+                                        console.log(data);
+                                        displayAll();
+                                        //location.reload();
+                                    }
+                                });
+                            }
                         }
                         
                         if (e.target.className === 'btn btn-danger deleteProductFormButton'){
