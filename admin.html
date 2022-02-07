@@ -54,23 +54,6 @@
               </ul>
             </div>
         </nav>
-
-        
-        <!--Filter select
-        <br>
-        <select class="form-select" onchange=onLoad(this.value) style="width:200px;position:absolute;right:190px" aria-label="filterSelect">
-            <option selected>Sort by</option>
-            <option value="1">Most recently added</option>
-            <option value="2">Earliest added</option>
-        </select>
-        -->
-
-        <!--Add Product-->
-        <!--
-        <form method='post' id='addProduct'>
-            <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#addProductModal'>Add Product</button>
-        </form>
-    -->
         
 
         <!-- Add Product modal -->
@@ -85,16 +68,16 @@
                     <div class="modal-body">
                         <form method='post' id='addProductForm'>
                             <label for="productName">Product Name</label>
-                                <input type='text' class='form-control' id='productName'></input>
+                                <input type='text' class='form-control' id='productName' maxlength='25'></input>
                                 <br>
                             <label for="productDescription">Product Description</label>
-                                <textarea class='form-control' id='productDescription' rows='3'></textarea>
+                                <textarea class='form-control' id='productDescription' rows='3' maxlength='200'></textarea>
                                 <br>
                             <label for="productPrice">Product Price</label>
-                                <input type='text' class='form-control' id='productPrice'></input>
+                                <input type='text' class='form-control' id='productPrice' maxlength='10'></input>
                                 <br>
                             <label for="productImageURL">Product Image URL</label>
-                                <input type='text' class='form-control' id='productImageURL'></input>
+                                <input type='text' class='form-control' id='productImageURL' maxlength='200'></input>
                                 <br>
                         </form>
                     </div>
@@ -135,21 +118,83 @@
                             var pIU = document.getElementById(`editProductImageURL${id}`).value 
                             var productToEdit = {product_id: id,name: pN, description: pD, price: pP, photo_url: pIU}
 
-                            $.ajax({
-                                url: '/editProduct',
-                                data: productToEdit,
-                                type: 'POST',
-                                success: function(data){
-                                    console.log(data);
-                                    console.log('EDIT SUCCESS');
-                                    displayAll();
-                                    //location.reload(); //reload page
-                                },
-                                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                                    console.log("some error");
+                            //input validation
+
+                            if(pN == '' | (isNaN(parseFloat(pP)) && pP != '') | pN.includes('\\')==true | pD.includes('\\')==true | pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
+
+                                //checks for empty name field or presence of backslash
+                                if(pN == '' | pN.includes('\\')==true){
+
+                                    if(pN==''){
+                                        document.getElementById(`nameInvalid${id}`).style.visibility = "visible";
+                                        document.getElementById(`nameInvalid${id}`).innerHTML = 'Name cannot be empty.';
+                                    }
+
+                                    else if(pN.includes('\\')==true){
+                                        document.getElementById(`nameInvalid${id}`).style.visibility = "visible";
+                                        document.getElementById(`nameInvalid${id}`).innerHTML = 'Invalid character: \\';
+                                    }
+                                    
+                                } else{
+                                    //this resets the invalid message in case this field is fixed but there are other errors present on form
+                                    document.getElementById(`nameInvalid${id}`).style.visibility = "hidden";  
+                                }  
+
+                                //checks for presence of backslash
+                                if(pD.includes('\\')==true){
+                                    document.getElementById(`descInvalid${id}`).style.visibility = "visible";
+                                    document.getElementById(`descInvalid${id}`).innerHTML = 'Invalid character: \\';
+                                } else{
+                                    document.getElementById(`descInvalid${id}`).style.visibility = "hidden";
+                                }
+
+                                //checks if price can be parsed as number but not whether the field is populated (i.e. price can be empty)
+                                if(isNaN(parseFloat(pP)) && pP != ''){
+                                    document.getElementById(`priceInvalid${id}`).style.visibility = "visible";
+                                    document.getElementById(`priceInvalid${id}`).innerHTML = 'Price must be a number.';
+                                } else{
+                                    document.getElementById(`priceInvalid${id}`).style.visibility = "hidden";
+                                }
+
+                                //checks for presence of single quote, double quote, or backslash in URL
+                                if(pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
+                                    document.getElementById(`urlInvalid${id}`).style.visibility = "visible";
+                                    document.getElementById(`urlInvalid${id}`).innerHTML = 'Invalid character in URL.';
+                                } else {
+                                    document.getElementById(`urlInvalid${id}`).style.visibility = "hidden";
                                 }
                             
-                            });
+                                return;
+                            }
+
+
+                            else {
+                                //dismiss modal
+                                $(`#product${id}`).modal('hide'); 
+
+                                //convert price to float and round to 2 decimal places if necessary. 
+                                var modPrice = parseFloat(pP);
+                                modPrice = modPrice.toFixed(2);
+                                if(modPrice != 'NaN'){                  //only pushes modified price to object if price != null
+                                    productToEdit.price= modPrice;
+                                }
+
+                                $.ajax({
+                                    url: '/editProduct',
+                                    data: productToEdit,
+                                    type: 'POST',
+                                    success: function(data){
+                                        console.log(data);
+                                        console.log('EDIT SUCCESS');
+                                        displayAll();
+                                        //location.reload(); //reload page
+                                    },
+                                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                        console.log("some error");
+                                    }
+                                
+                                });
+                            }
                         }
 
                         if (e.target.id === 'addProductFormButton'){
@@ -252,16 +297,20 @@
                             <div class="modal-body">
                                 <form method='post' id='editProductForm${productID}'>
                                     <label for="editProductName">Product Name</label>
-                                        <input type='text' class='form-control' id='editProductName${productID}' value=${productName}></input>
+                                        <input type='text' class='form-control' id='editProductName${productID}' value=${productName} maxlength='25'></input>
+                                        <div id='nameInvalid${productID}' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductDescription">Product Description</label>
-                                        <textarea class='form-control' id='editProductDescription${productID}' rows='3'>${productDesc}</textarea>
+                                        <textarea class='form-control' id='editProductDescription${productID}' rows='3' maxlength='200'>${productDesc}</textarea>
+                                        <div id='descInvalid${productID}' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductPrice">Product Price</label>
-                                        <input type='text' class='form-control' id='editProductPrice${productID}' value=${productPrice}></input>
+                                        <input type='text' class='form-control' id='editProductPrice${productID}' value=${productPrice} maxlength='10'></input>
+                                        <div id='priceInvalid${productID}' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductImageURL">Product Image URL</label>
-                                        <input type='text' class='form-control' id='editProductImageURL${productID}' value=${productPhoto}></input>
+                                        <input type='text' class='form-control' id='editProductImageURL${productID}' value=${productPhoto} maxlength='200'></input>
+                                        <div id='urlInvalid${productID}' style='visibility:hidden;color: red'></div>
                                         <br>
                                 </form>
                             </div>
@@ -270,7 +319,7 @@
                                 
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                    
-                                <button type="button" class="btn btn-primary editProductFormButton" id='edit${productID}' data-bs-dismiss="modal">Edit Product</button>
+                                <button type="button" class="btn btn-primary editProductFormButton" id='edit${productID}'>Edit Product</button>
                             </div>
                         </div>
                     </div>
