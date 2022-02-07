@@ -148,11 +148,15 @@
             productsHTML = ''
             for (let i = 0; i < productsObject.length; i++) {
                 var productName = JSON.stringify(productsObject[i].name);
-                    var productNameNoQuotes = productName.substring(1, productName.length-1);
+                    var productNameNoQuotes = productName.substring(1, productName.length-1); //removes first and last char (dbl quotes)
+                    productNameNoQuotes= productNameNoQuotes.replaceAll('\\"', '&quot;');  //replaces dbl quote with HTML dbl quote code
+                    productName = '"'+productNameNoQuotes+'"';
                 var productPrice = JSON.stringify(productsObject[i].price);
                     var productPriceNoQuotes = productPrice.substring(1, productPrice.length-1);
                 var productDesc = JSON.stringify(productsObject[i].description);
-                    var productDesc = productDesc.substring(1, productDesc.length-1); //removes quotes from string
+                    productDesc = productDesc.substring(1, productDesc.length-1); 
+                    productDesc = productDesc.replaceAll('\\n', '<br/>'); //replace newlines with HTML newline code for textarea
+                    productDesc = productDesc.replaceAll('\\"', '&quot;');  
                 var productPhoto = JSON.stringify(productsObject[i].photo_url);
                 var productID = JSON.stringify(productsObject[i].product_id)
 
