@@ -161,7 +161,7 @@
                 var productID = JSON.stringify(productsObject[i].product_id)
 
                 productsHTML = productsHTML.concat(' ', `
-                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'>${productDesc}<br><br>$${productPriceNoQuotes}</div></span></button>
+                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div style='height:7.5rem;overflow:hidden'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
 
                 <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="viewProduct${productID}" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
