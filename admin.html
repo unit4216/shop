@@ -69,19 +69,19 @@
                         <form method='post' id='addProductForm'>
                             <label for="productName">Product Name</label>
                                 <input type='text' class='form-control' id='productName' maxlength='25'></input>
-                                <div id='nameInvalid' style='visibility:hidden;color: red'></div>
+                                <div id='nameInvalid' class='invalid' style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productDescription">Product Description</label>
                                 <textarea class='form-control' id='productDescription' rows='3' maxlength='200'></textarea>
-                                <div id='descInvalid' style='visibility:hidden;color: red'></div>
+                                <div id='descInvalid' class='invalid' style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productPrice">Product Price</label>
                                 <input type='text' class='form-control' id='productPrice' maxlength='10'></input>
-                                <div id='priceInvalid' style='visibility:hidden;color: red'></div>
+                                <div id='priceInvalid' class='invalid style='visibility:hidden;color: red'></div>
                                 <br>
                             <label for="productImageURL">Product Image URL</label>
                                 <input type='text' class='form-control' id='productImageURL' maxlength='200'></input>
-                                <div id='urlInvalid' style='visibility:hidden;color: red'></div>
+                                <div id='urlInvalid' class='invalid' style='visibility:hidden;color: red'></div>
                                 <br>
                         </form>
                     </div>
@@ -258,10 +258,12 @@
         
             
 
-            //resets modal values on close rather than letting them persist (i.e. if you change a value but dont save it, it wont persist)
+            //resets modals on close so that invalid messages and changed values don't persist if not saved (i.e. submitted)
             $(document).ready(function($) {
-                $('div.modal.fade').on('hidden.bs.modal', function () {
-                    $(this).find('form').trigger('reset');
+                $('.modal.fade').on('hidden.bs.modal', function () {
+                    $(this).find('form').trigger('reset');               //reset form values
+                    $(this).find('.invalid').css('visibility','hidden'); //reset invalid messages
+                    $(this).find('.invalid').html('');
                 })
             });
         
@@ -316,19 +318,19 @@
                                 <form method='post' id='editProductForm${productID}'>
                                     <label for="editProductName">Product Name</label>
                                         <input type='text' class='form-control' id='editProductName${productID}' value=${productName} maxlength='25'></input>
-                                        <div id='nameInvalid${productID}' style='visibility:hidden;color: red'></div>
+                                        <div id='nameInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductDescription">Product Description</label>
                                         <textarea class='form-control' id='editProductDescription${productID}' rows='3' maxlength='200'>${productDesc}</textarea>
-                                        <div id='descInvalid${productID}' style='visibility:hidden;color: red'></div>
+                                        <div id='descInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductPrice">Product Price</label>
                                         <input type='text' class='form-control' id='editProductPrice${productID}' value=${productPrice} maxlength='10'></input>
-                                        <div id='priceInvalid${productID}' style='visibility:hidden;color: red'></div>
+                                        <div id='priceInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
                                         <br>
                                     <label for="editProductImageURL">Product Image URL</label>
                                         <input type='text' class='form-control' id='editProductImageURL${productID}' value=${productPhoto} maxlength='200'></input>
-                                        <div id='urlInvalid${productID}' style='visibility:hidden;color: red'></div>
+                                        <div id='urlInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
                                         <br>
                                 </form>
                             </div>
