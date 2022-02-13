@@ -27,14 +27,10 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;500&display=swap" rel="stylesheet">
 
-
     </head>
-
-
 
     <body>
 
-     
         <!--Navbar-->
         <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
             <a class="navbar-brand" href="#">Admin</a>
@@ -69,19 +65,19 @@
                         <form method='post' id='addProductForm'>
                             <label for="productName">Product Name</label>
                                 <input type='text' class='form-control' id='productName' maxlength='25'></input>
-                                <div id='nameInvalid' class='invalid' style='visibility:hidden;color: red'></div>
+                                <div id='nameInvalid' class='invalid'></div>
                                 <br>
                             <label for="productDescription">Product Description</label>
                                 <textarea class='form-control' id='productDescription' rows='3' maxlength='200'></textarea>
-                                <div id='descInvalid' class='invalid' style='visibility:hidden;color: red'></div>
+                                <div id='descInvalid' class='invalid'></div>
                                 <br>
                             <label for="productPrice">Product Price</label>
                                 <input type='text' class='form-control' id='productPrice' maxlength='10'></input>
-                                <div id='priceInvalid' class='invalid style='visibility:hidden;color: red'></div>
+                                <div id='priceInvalid' class='invalid'></div>
                                 <br>
                             <label for="productImageURL">Product Image URL</label>
                                 <input type='text' class='form-control' id='productImageURL' maxlength='200'></input>
-                                <div id='urlInvalid' class='invalid' style='visibility:hidden;color: red'></div>
+                                <div id='urlInvalid' class='invalid'></div>
                                 <br>
                         </form>
                     </div>
@@ -96,9 +92,10 @@
 
         <script>
 
-            //AJAX call to Edit Product (requires doc.ready)
+            
             $(document).ready(function($) {
 
+                //input validation function for EDIT and ADD
                 function validateInput(pN,pD,pP,pIU,nameSelector,descSelector,priceSelector,urlSelector){
 
                     //checks for empty name field or presence of backslash
@@ -145,6 +142,7 @@
                     
                 }
                 
+                //listens for clicks on EDIT, ADD, or DELETE buttons which triggers respective functions
                 document.body.addEventListener('click', e => {
                         if (e.target.className === 'btn btn-primary editProductFormButton'){
 
@@ -158,14 +156,13 @@
                             var pIU = document.getElementById(`editProductImageURL${id}`).value 
                             var productToEdit = {product_id: id,name: pN, description: pD, price: pP, photo_url: pIU}
 
-
-                            //input validation
+                            //if bad input detected, send inputs to validation function to be parsed to return exact errors to user
                             if(pN == '' | (isNaN(parseFloat(pP)) && pP != '') | pN.includes('\\')==true | pD.includes('\\')==true | pIU.includes('\\')==true | pIU.includes("'")==true | pIU.includes('"')==true){
                                 validateInput(pN,pD,pP,pIU,`nameInvalid${id}`,`descInvalid${id}`,`priceInvalid${id}`,`urlInvalid${id}`)
                                 return;
                             }
 
-
+                            //if input is good, continue
                             else {
                                 //dismiss modal
                                 $(`#product${id}`).modal('hide'); 
@@ -182,13 +179,11 @@
                                     data: productToEdit,
                                     type: 'POST',
                                     success: function(data){
-                                        console.log(data);
-                                        console.log('EDIT SUCCESS');
+                                        console.log('AJAX edit success');
                                         displayAll();
-                                        //location.reload(); //reload page
                                     },
                                     error: function(XMLHttpRequest, textStatus, errorThrown) {
-                                        console.log("some error");
+                                        console.log("AJAX edit error");
                                     }
                                 
                                 });
@@ -209,7 +204,6 @@
                                 return;
                             }
 
-
                             else{
 
                                 //dismiss modal
@@ -227,9 +221,11 @@
                                     data: productToAdd,
                                     type: 'POST',
                                     success: function(data){
-                                        console.log(data);
+                                        console.log('AJAX add success');
                                         displayAll();
-                                        //location.reload();
+                                    },
+                                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                        console.log("AJAX add error");
                                     }
                                 });
                             }
@@ -239,7 +235,8 @@
                             e.preventDefault();
 
                             var productToDeleteID = {}
-                            //extracts ID from "delete(number)" id
+
+                            //gets ID of product to delete
                             productToDeleteID['ID'] = e.target.id.replace('delete','');
 
                             $.ajax({
@@ -247,18 +244,18 @@
                                 data: productToDeleteID,
                                 type: 'POST',
                                 success: function(data){
-                                    console.log(data);
+                                    console.log('AJAX delete success');
                                     displayAll();
-                                    //location.reload();
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    console.log("AJAX delete error");
                                 }
                             });
                         }
                     });
             });            
         
-            
-
-            //resets modals on close so that invalid messages and changed values don't persist if not saved (i.e. submitted)
+            //resets modals on close so that invalid messages and changed values don't persist
             $(document).ready(function($) {
                 $('.modal.fade').on('hidden.bs.modal', function () {
                     $(this).find('form').trigger('reset');               //reset form values
@@ -267,11 +264,11 @@
                 })
             });
         
-
-        
         displayAll();
+
+        //runs on load and when called to pull data from server and display products
         function displayAll(){
-            //AJAX RESPONSE CATCHER - RUNS ON INITIAL LOAD TO RECEIVE PRODUCTS DIRECTORY FROM SERVER
+            
             var req = new XMLHttpRequest();
             var url = '/display';
 
@@ -280,10 +277,10 @@
             req.addEventListener('error',onError);
 
             req.send();
+
         }
 
         function onLoad() {
-            console.log(this.responseText)
             
             //parses object to create HTML to send to div
             productsObject = JSON.parse(this.responseText)
@@ -304,7 +301,7 @@
                 var productID = JSON.stringify(productsObject[i].product_id)
 
                 productsHTML = productsHTML.concat(' ', `
-                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>#${productID} - ${productNameNoQuotes}<br><br><div class='hoverContent'><div style='height:7.5rem;overflow:hidden'>${hoverDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
+                <button type='button' style='background: url(${productPhoto}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>#${productID} - ${productNameNoQuotes}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${hoverDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
 
                 <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="editProductLabel${productID}" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -318,24 +315,24 @@
                                 <form method='post' id='editProductForm${productID}'>
                                     <label for="editProductName">Product Name</label>
                                         <input type='text' class='form-control' id='editProductName${productID}' value=${productName} maxlength='25'></input>
-                                        <div id='nameInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
+                                        <div id='nameInvalid${productID}' class='invalid'></div>
                                         <br>
                                     <label for="editProductDescription">Product Description</label>
                                         <textarea class='form-control' id='editProductDescription${productID}' rows='3' maxlength='200'>${productDesc}</textarea>
-                                        <div id='descInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
+                                        <div id='descInvalid${productID}' class='invalid'></div>
                                         <br>
                                     <label for="editProductPrice">Product Price</label>
                                         <input type='text' class='form-control' id='editProductPrice${productID}' value=${productPrice} maxlength='10'></input>
-                                        <div id='priceInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
+                                        <div id='priceInvalid${productID}' class='invalid'></div>
                                         <br>
                                     <label for="editProductImageURL">Product Image URL</label>
                                         <input type='text' class='form-control' id='editProductImageURL${productID}' value=${productPhoto} maxlength='200'></input>
-                                        <div id='urlInvalid${productID}' class='invalid' style='visibility:hidden;color: red'></div>
+                                        <div id='urlInvalid${productID}' class='invalid'></div>
                                         <br>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger deleteProductFormButton" id='delete${productID}' style="margin-right:133px" data-bs-dismiss="modal">Delete Product</button>
+                                <button type="button" class="btn btn-danger deleteProductFormButton" id='delete${productID}' data-bs-dismiss="modal">Delete Product</button>
                                 
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                    
@@ -347,7 +344,6 @@
 
                 `);
             }
-            //console.log(productsHTML);
             
             document.getElementById('adminProducts').innerHTML = '';
             document.getElementById('adminProducts').innerHTML = productsHTML;
@@ -356,22 +352,14 @@
         }
 
         function onError() {
-        // handle error here, print message perhaps
-        console.log('error receiving async AJAX call');
+            console.log('error receiving display AJAX call');
         }
-            
         
         </script>
         
-        
-        <br><br>
-        <div id='adminProducts'>
+        <div id='adminProducts' class="productsGrid">
             <!--Insert products here for admin editing-->
         </div>
-
-
-
-
 
     </body>
 

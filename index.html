@@ -155,7 +155,7 @@
                 var productID = JSON.stringify(productsObject[i].product_id)
 
                 productsHTML = productsHTML.concat(' ', `
-                <button type='button' style='background: url(${productPhoto}) no-repeat;' class='btn btn-light shadow userProduct' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
+                <button type='button' style='background: url(${productPhoto}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
 
                 <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="viewProduct${productID}" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -192,7 +192,7 @@
         }
 
         function onError() {
-            console.log('error receiving async AJAX call');
+            console.log('error receiving display AJAX call');
         }
             
         //checks if myCart item exists in localStorage, if not it initializes it
@@ -424,7 +424,7 @@
 
         </script>
 
-        <div id='shopProducts'>
+        <div id='shopProducts' class="productsGrid">
             <!--Display products here-->
         </div>
 
