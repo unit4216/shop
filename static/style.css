@@ -1,3 +1,5 @@
+/*      BOTH PAGES CSS      */
+
 .productsGrid {
     margin-top: 3.2rem;
 }
@@ -27,14 +29,6 @@
     color:rgb(170, 170, 170) !important;
 }
 
-#addProduct {
-    margin-right:200px;
-    padding-top:15px;
-    display:inline;
-    float:right !important;
-    
-}
-
 /* Product boxes/divs */
 .product {
     height: 300px;
@@ -52,6 +46,7 @@
     background-size: cover !important;
     
 }
+
 
 /*Text inside product box */
 .product span {
@@ -92,21 +87,47 @@
     
 }
 
-/* user-side modal photo*/
+.modal-content {
+    border-radius: 10px !important;
+    border: none !important;
+}
+
+.hoverInnerDesc {
+    height: 7.5rem;
+    overflow: hidden;
+}
+
+.invalid {
+    visibility:hidden;
+    color: red;
+}
+
+/*      ADMIN PAGE ONLY CSS      */
+
+#addProduct {
+    margin-right:200px;
+    padding-top:15px;
+    display:inline;
+    float:right !important;
+    
+}
+
+.deleteProductFormButton {
+    margin-right: 133px !important;
+}
+
+/*      USER PAGE ONLY CSS       */
+
 .modalPhoto {
     width:100%;
     padding: 0 !important;
     border-radius: 10px 0px 0px 10px !important;
+    height: 36rem;
 }
 
 .modal-body.User {
     padding: 0 !important;
     padding-left: 0 !important;
-}
-
-.modal-content {
-    border-radius: 10px !important;
-    border: none !important;
 }
 
 .modalProductName{
@@ -152,11 +173,6 @@
     position: absolute;
     right: 190px;
     margin-top: 1rem;
-}
-
-.hoverInnerDesc {
-    height: 7.5rem;
-    overflow: hidden;
 }
 
 .userModalContainer {
@@ -265,13 +281,4 @@
     display:inline-block;
     position:absolute;
     left:340px;
-}
-
-.invalid {
-    visibility:hidden;
-    color: red;
-}
-
-.deleteProductFormButton {
-    margin-right: 133px !important;
 }
