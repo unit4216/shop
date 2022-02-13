@@ -2,7 +2,6 @@
     margin-top: 3.2rem;
 }
 
-/* Navbar brand */
 .navbar-brand {
     font-family: Outfit;
     font-weight: 500;
@@ -10,12 +9,10 @@
     margin-left: 50px;
 }
 
-/* Navbar */
 .navbar {
     border-bottom: 1px solid rgb(180, 180, 180);
 }
 
-/* Shop link in navbar on Admin page */
 .nav-link {
     font-family: Outfit;
     font-weight: 200;
@@ -26,12 +23,10 @@
     font-style: normal !important;
 }
 
-/* Hover on links in Nav bar */
 .nav-link:hover {
     color:rgb(170, 170, 170) !important;
 }
 
-/* Add product button */
 #addProduct {
     margin-right:200px;
     padding-top:15px;
@@ -73,19 +68,17 @@
     
 }
 
-/*content that changes properties when hovering over product box */
+/* .product content hover */
 .hoverContent {
     opacity:0;
     padding: 20px;
 }
 
-/* Changes the opacity on .hoverContent when hovering over product */
 .product:hover .hoverContent {
     opacity:1 !important;
     transition-duration: 1s;
 }
 
-/* Product content on hover */
 .product:hover span {
     display:block;
     color:white;
@@ -99,26 +92,23 @@
     
 }
 
-/* Photo in modal on user side*/
+/* user-side modal photo*/
 .modalPhoto {
     width:100%;
     padding: 0 !important;
     border-radius: 10px 0px 0px 10px !important;
 }
 
-/* Modal body settings */
 .modal-body.User {
     padding: 0 !important;
     padding-left: 0 !important;
 }
 
-/* Modal content settings */
 .modal-content {
     border-radius: 10px !important;
     border: none !important;
 }
 
-/* Modal content (name/desc/price) */
 .modalProductName{
     font-family: Outfit;
     font-weight: 400;
@@ -147,7 +137,6 @@
     bottom: 7rem;
 }
 
-/* Add to Cart button on modal on shop end */
 .addProductToCart {
     position: absolute;
     bottom: 20px;
@@ -164,7 +153,6 @@
     right: 190px;
     margin-top: 1rem;
 }
-
 
 .hoverInnerDesc {
     height: 7.5rem;
