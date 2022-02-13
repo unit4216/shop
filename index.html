@@ -2,6 +2,7 @@
 <html lang='en'>
 
     <head>
+
         <meta charset='utf-8'>
         <meta name="viewport" content="width=device-width", initial-scale="1.0">
         <meta http-equiv="X-UA-Compatible" content="ie-edge">
@@ -27,7 +28,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;500&display=swap" rel="stylesheet">
-
 
     </head>
 
@@ -55,8 +55,7 @@
         </nav>
 
         <!--Filter select-->
-        <br>
-        <select class="form-select" onchange=onLoad(this.value) style="width:200px;position:absolute;right:190px" aria-label="filterSelect">
+        <select class="form-select" onchange=onLoad(this.value) id='selectBox' aria-label="filterSelect">
             <option selected>Sort by</option>
             <option value="1">Price High to Low</option>
             <option value="2">Price Low to High</option>
@@ -106,10 +105,7 @@
 
         <script>
 
-        //displayAll();
-
-
-        //AJAX RESPONSE CATCHER - RUNS ON INITIAL LOAD TO RECEIVE PRODUCTS DIRECTORY FROM SERVER
+        //runs on refresh/load to grab products from server
         var req = new XMLHttpRequest();
         var url = '/display';
 
@@ -141,10 +137,8 @@
                     });
                 }
             }
-            //console.log(this.responseText)
 
             //parses object to create HTML to send to div
-            //productsObject = JSON.parse(this.responseText)
             productsHTML = ''
             for (let i = 0; i < productsObject.length; i++) {
                 var productName = JSON.stringify(productsObject[i].name);
@@ -161,29 +155,25 @@
                 var productID = JSON.stringify(productsObject[i].product_id)
 
                 productsHTML = productsHTML.concat(' ', `
-                <button type='button' style='background: url(${productPhoto}) no-repeat;background-size:cover;' class='btn btn-light shadow' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div style='height:7.5rem;overflow:hidden'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
+                <button type='button' style='background: url(${productPhoto}) no-repeat;' class='btn btn-light shadow userProduct' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
 
                 <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="viewProduct${productID}" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">   
                             <div class="modal-body User">
-                                <div class="container col-md-12" style='padding:0'>
+                                <div class="container col-md-12 userModalContainer">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <img src=${productPhoto} class='modalPhoto'>
                                         </div>
                                         <div class="col-md-6">
-                                            <button type="button" style='float:right;padding-top:20px;padding-right:20px' class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close userBtnClose" data-bs-dismiss="modal" aria-label="Close"></button>
                                             <div>
-                                                <br><br>
                                                 <div class='modalProductName'>${productNameNoQuotes}</div>
-                                                <br><br><br><br>
                                                 <div class='modalProductDesc'>${productDesc}</div>
-                                                <br><br><br><br>
                                                 <div class='modalProductPrice'>$${productPriceNoQuotes}</div>
-                                                <br>
                                                 <form method='post' class='addProductToCart' id='addProductToCart${productID}'>
-                                                    <button type="button" onclick=addToCart(${productID}) class="btn btn-primary" style='display:inline-block' data-bs-dismiss="modal">Add to Cart</button>
+                                                    <button type="button" onclick=addToCart(${productID}) class="btn btn-primary btnAddToCart" data-bs-dismiss="modal">Add to Cart</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -193,60 +183,37 @@
                         </div>
                     </div>
                 </div>
-
                 `);
             }
-            //console.log(productsHTML);
             
             document.getElementById('shopProducts').innerHTML = '';
             document.getElementById('shopProducts').innerHTML = productsHTML;
             
-
         }
 
         function onError() {
-        // handle error here, print message perhaps
-        console.log('error receiving async AJAX call');
+            console.log('error receiving async AJAX call');
         }
             
-        
-
-        //clear localStorage (for testing)
-        //localStorage.clear();
-
-
         //checks if myCart item exists in localStorage, if not it initializes it
         if (localStorage.getItem("myCart") === null) {
             myCart=[];
-            console.log('didnt exst');
         }
         else if (localStorage.getItem("myCart") != null){
             myCart = JSON.parse(localStorage.getItem("myCart"));
-            console.log('retrieved')
-            console.log(JSON.stringify(myCart))
         }
-
         
-        //define addToCart function
         function addToCart(id){
-
-            //check if myCart exists in localStorage
-            if (localStorage.getItem("myCart") === null) {
-                myCart=[];
-            }
-            else if (localStorage.getItem("myCart") != null){
-                myCart = JSON.parse(localStorage.getItem("myCart"));
-            }
 
             //filters products array by product_id to extract item (have to do parse/stringify to make deep copy of filtered result from array)
             var productToAdd = JSON.parse(JSON.stringify((productsObject.filter(obj => {
                 return obj.product_id === id
-                }))))
+                }))));
 
             //removes object from single-object array
             productToAdd=productToAdd[0];
 
-            //add quantity property to item
+            //init quantity property for item
             productToAdd.quantity = 1;
 
             //generate list of PIDs to check against
@@ -271,8 +238,6 @@
 
         }
 
-
-
         //populates myCart onclick of My Cart link
         function populateCart(){
 
@@ -293,32 +258,31 @@
                 cartSum = cartSum.toFixed(2);
 
                 //generate HTML
-                myCartHTML='<div id="myCartHeader">Product <div style="display:inline-block;position:absolute;right:160px">Qty</div><div style="display:inline-block;position:absolute;right:72px">Price</div></div><br>'
+                myCartHTML='<div id="myCartHeader">Product <div id="cartQtyTitle">Qty</div><div id="cartPriceTitle">Price</div></div><br>'
                 for (let i = 0; i < myCart.length; i++) {
                     var myCartProdName = myCart[i].name;
                     var myCartProdPrice = myCart[i].price;
                     var myCartProdQuantity = myCart[i].quantity;
                     var myCartProdID = myCart[i].product_id;
                     var myCartHTML = myCartHTML.concat(' ', `
-                    <div style='font-family:Outfit;font-weight:200'>
-                        <div style='display:inline-block'>${myCartProdName}</div> 
-                        <div style='display:inline-block;position:absolute;right:200px;font-size: 12px'><a href='#' onclick=updateQty(${myCartProdID})>Update</a></div>
-                        <div style='display:inline-block;position:absolute;right:120px'>
-                            <input type='number' class='form-control qty' style='width:70px;' value='${myCartProdQuantity}' id='changeQty${myCartProdID}' min='1' max='99'></input>
+                    <div class='cartProdContainer'>
+                        <div class='cartProdName'>${myCartProdName}</div> 
+                        <div class='btnUpdateQty'><a href='#' onclick=updateQty(${myCartProdID})>Update</a></div>
+                        <div class='inputUpdateQty'>
+                            <input type='number' class='form-control qty' value='${myCartProdQuantity}' id='changeQty${myCartProdID}' min='1' max='99'></input>
                         </div> 
-                        <div style='display:inline-block;position:absolute;left:392px'> x $${myCartProdPrice}</div>
-                        <a href='#' onclick=deleteProduct(${myCartProdID})><img src='trash.svg' height=18 width=18 style='float:right'></a>
+                        <div class='cartProdPrice'> x $${myCartProdPrice}</div>
+                        <a href='#' onclick=deleteProduct(${myCartProdID})><img id='trashIcon' src='trash.svg' height=18 width=18></a>
                     </div><br>
                     `)
                 }
 
                 //add sum to HTML
-                myCartHTML = myCartHTML.concat(' ',`<div style='font-family:Outfit;font-weight:400;'><div style='display:inline-block'>Total</div> <div style='display:inline-block;position:absolute;left:405px'>$${cartSum}</div></div>`)
+                myCartHTML = myCartHTML.concat(' ',`<div id='cartSumContainer'><div id='cartSumTitle'>Total</div> <div id='cartSum'>$${cartSum}</div></div>`)
 
                 //send HTML to modal
                 document.getElementById('myCartModalBody').innerHTML = myCartHTML;
 
-                console.log(myCart);
             }
         }
 
@@ -332,7 +296,6 @@
 
                 //retrieve myOrders from localStorage
                 myOrders = JSON.parse(localStorage.getItem("myOrders"));
-                console.log(myOrders)
 
                 //init myOrdersHTML
                 myOrdersHTML='<div id="accordion">'
@@ -344,7 +307,7 @@
                     <div class="card">
                         <div class="card-header" id='heading${i}'>
                             <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" style='text-decoration:none;color:rgb(100,100,100)' data-bs-toggle="collapse" data-bs-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
+                                <button class="btn btn-link collapsed myOrder" data-bs-toggle="collapse" data-bs-target="#collapse${i}" aria-expanded="false" aria-controls="collapse${i}">
                                     Order ${myOrders[i][0].datetime} <img src='dropdown_arrow.png' height=10 width=10>
                                 </button>
                             </h5>
@@ -363,12 +326,12 @@
                     for (let x = 0; x < myOrders[i].length; x++) {
                         listProductHTML=`
                         <li class='list-group-item'>
-                        <div style='display:inline-block'>${myOrders[i][x].name}</div>
-                        <div style='display:inline-block;position:absolute;left:250px'>x${myOrders[i][x].quantity}</div>
-                        <div style='display:inline-block;position:absolute;left:340px'>$${myOrders[i][x].price}</div>
+                        <div class='orderItemName'>${myOrders[i][x].name}</div>
+                        <div class='orderItemQty'>x${myOrders[i][x].quantity}</div>
+                        <div class='orderItemPrice'>$${myOrders[i][x].price}</div>
                         </li>
                         `
-                        orderSum = orderSum + (myOrders[i][x].quantity*myOrders[i][x].price);
+                        orderSum = orderSum + (myOrders[i][x].quantity * myOrders[i][x].price);
                         innerProductsHTML=innerProductsHTML.concat(' ',listProductHTML);
                     }
 
@@ -376,7 +339,7 @@
                     orderSum=orderSum.toFixed(2);
                     
                     //add HTML for sum
-                    sumHTML=`<li class='list-group-item' style='font-weight:bold'>Total<div style='display:inline-block;position:absolute;left:340px'>$${orderSum}</div></li>`;
+                    sumHTML=`<li class='list-group-item orderSumTitle'>Total<div class='orderSum'>$${orderSum}</div></li>`;
 
                     //concat all HTML together
                     myOrdersHTML=myOrdersHTML.concat(' ',frontendHTML);
@@ -384,13 +347,10 @@
                     myOrdersHTML=myOrdersHTML.concat(' ',sumHTML);
                     myOrdersHTML=myOrdersHTML.concat(' ',bookendHTML);
 
-
                 }
 
                 //close accordion div
                 myOrdersHTML=myOrdersHTML.concat(' ','</div>');
-
-                console.log(myOrdersHTML)
 
                 //send HTML to modal
                 document.getElementById('myOrdersModalBody').innerHTML = myOrdersHTML;
@@ -399,7 +359,6 @@
 
         function updateQty(id){
 
-        
             //gets new qty from input box
             var qtyToChange = document.getElementById(`changeQty${id}`).value;
 
@@ -454,31 +413,21 @@
             //push current cart to myOrders
             myOrders.push(myCart);
 
-            //set myOrders in localstorage
+            //set myOrders in localstorage and remove cart
             localStorage.setItem("myOrders",JSON.stringify(myOrders));
-
             localStorage.removeItem("myCart");
-
 
             //reset cart to empty after checkout
             myCart = [];
 
         }
 
-
-
         </script>
 
-
-        <br><br>
         <div id='shopProducts'>
             <!--Display products here-->
         </div>
 
-    
-
-
     </body>
-
 
 </html>

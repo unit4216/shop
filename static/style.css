@@ -1,3 +1,7 @@
+#shopProducts {
+    margin-top: 3.2rem;
+}
+
 /* Navbar brand */
 .navbar-brand {
     font-family: Outfit;
@@ -50,6 +54,7 @@
     font-family: Outfit;
     font-weight: 200;
     position: relative;
+    background-size: cover !important;
     
 }
 
@@ -73,13 +78,6 @@
     opacity:0;
     padding: 20px;
 }
-
-
-/* Product box itself on hover 
-.btn.btn-light:hover {
-    border: 2px black !important;
-}
-*/
 
 /* Changes the opacity on .hoverContent when hovering over .btn-.btn-light (product box) */
 .btn.btn-light:hover .hoverContent {
@@ -127,6 +125,7 @@
     font-size: 30px;
     padding-left: 10px;
     padding-right: 40px;
+    margin-top: 5rem;
 }
 
 .modalProductDesc{
@@ -135,16 +134,17 @@
     font-size: 20px;
     padding-left: 10px;
     padding-right: 40px;
-
+    margin-top: 3rem;
 }
 
 .modalProductPrice{
+    position: absolute;
     font-family: Outfit;
     font-weight: 400;
     font-size: 50px;
     padding-left: 10px;
     padding-right: 40px;
-
+    bottom: 7rem;
 }
 
 /* Add to Cart button on modal on shop end */
@@ -156,4 +156,125 @@
 
 #myCartHeader {
     font-family: Outfit;
+}
+
+#selectBox {
+    width: 200px;
+    position: absolute;
+    right: 190px;
+    margin-top: 1rem;
+}
+
+
+.hoverInnerDesc {
+    height: 7.5rem;
+    overflow: hidden;
+}
+
+.userModalContainer {
+    padding: 0 !important;
+}
+
+.userBtnClose {
+    float:right;
+    padding-top:20px !important;
+    padding-right:20px !important;
+}
+
+.btnAddToCart {
+    display: inline-block;
+}
+
+#cartQtyTitle {
+    display: inline-block;
+    position: absolute;
+    right: 160px;
+}
+
+#cartPriceTitle {
+    display: inline-block;
+    position: absolute;
+    right: 72px;
+}
+
+.cartProdContainer {
+    font-family: Outfit;
+    font-weight: 200;
+}
+
+.cartProdName {
+    display: inline-block;
+}
+
+.btnUpdateQty {
+    display: inline-block;
+    position: absolute;
+    right: 200px;
+    font-size: 12px;
+}
+
+.inputUpdateQty {
+    display: inline-block;
+    position: absolute;
+    right: 120px;
+}
+
+.inputUpdateQty input {
+    width: 70px;
+}
+
+.cartProdPrice {
+    display: inline-block;
+    position: absolute;
+    left:392px;
+}
+
+#trashIcon {
+    float: right;
+}
+
+#cartSumContainer {
+    font-family: Outfit;
+    font-weight: 400;
+}
+
+#cartSumTitle {
+    display: inline-block;
+}
+
+#cartSum {
+    display: inline-block;
+    position: absolute;
+    left: 405px;
+}
+
+.myOrder{
+    text-decoration: none !important;
+    color:rgb(100,100,100) !important;
+}
+
+.orderItemName {
+    display: inline-block;
+}
+
+.orderItemQty {
+    display: inline-block;
+    position: absolute;
+    left: 250px;
+}
+
+.orderItemPrice {
+    display: inline-block;
+    position: absolute;
+    left:340px;
+}
+
+.orderSumTitle {
+    font-weight: bold;
+}
+
+.orderSum {
+    display:inline-block;
+    position:absolute;
+    left:340px;
 }
