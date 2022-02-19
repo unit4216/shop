@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 //set up CORS (cross-origin) to get around CORS warnings/errors
 app.use(cors());
