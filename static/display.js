@@ -1,15 +1,15 @@
 class productGridItem {
 
-    constructor(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, productDesc, productPhoto, productID, hoverDesc) {
+    constructor(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, inputDesc, productPhoto, productID, productDesc) {
 
         this.name = productName;
         this.nameNQ = productNameNoQuotes;
         this.price = productPrice;
         this.priceNQ = productPriceNoQuotes;
-        this.desc = productDesc;
+        this.inputDesc = inputDesc;
         this.photo = productPhoto;
         this.id = productID;
-        this.hover = hoverDesc;
+        this.desc = productDesc;
 
     }
 
@@ -59,7 +59,7 @@ class productGridItem {
     generateAdminHTML(){
 
         var adminHTML = `
-        <button type='button' style='background: url(${this.photo}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${this.id}'><span>#${this.id} - ${this.nameNQ}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${this.hover}</div><br>$${this.priceNQ}</div></span></button>
+        <button type='button' style='background: url(${this.photo}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${this.id}'><span>#${this.id} - ${this.nameNQ}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${this.desc}</div><br>$${this.priceNQ}</div></span></button>
 
         <div class="modal fade" id='product${this.id}' tabindex="-1" role="dialog" aria-labelledby="editProductLabel${this.id}" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -76,7 +76,7 @@ class productGridItem {
                                 <div id='nameInvalid${this.id}' class='invalid'></div>
                                 <br>
                             <label for="editProductDescription">Product Description</label>
-                                <textarea class='form-control' id='editProductDescription${this.id}' rows='3' maxlength='200'>${this.desc}</textarea>
+                                <textarea class='form-control' id='editProductDescription${this.id}' rows='3' maxlength='200'>${this.inputDesc}</textarea>
                                 <div id='descInvalid${this.id}' class='invalid'></div>
                                 <br>
                             <label for="editProductPrice">Product Price</label>
@@ -149,15 +149,15 @@ function onLoad(data, page, sort) {
             productName = '"'+productNameNoQuotes+'"';
         var productPrice = JSON.stringify(productsObject[i].price);
             var productPriceNoQuotes = productPrice.substring(1, productPrice.length-1); 
-        var productDesc = JSON.stringify(productsObject[i].description);
-            productDesc = productDesc.substring(1, productDesc.length-1); 
-            productDesc = productDesc.replaceAll('\\n', '&#13;'); //replace newlines with HTML newline code for textarea
-            productDesc = productDesc.replaceAll('\\"', '&quot;');  
-        var hoverDesc = productDesc.replaceAll('&#13;','<br/>') //newline code doesn't work on hover so it must be replaced with <br/>
+        var inputDesc = JSON.stringify(productsObject[i].description);
+            inputDesc = inputDesc.substring(1, inputDesc.length-1); 
+            inputDesc = inputDesc.replaceAll('\\n', '&#13;'); //replace newlines with HTML newline code for textarea
+            inputDesc = inputDesc.replaceAll('\\"', '&quot;');  
+        var productDesc = inputDesc.replaceAll('&#13;','<br/>') //newline code doesn't work on hover so it must be replaced with <br/>
         var productPhoto = JSON.stringify(productsObject[i].photo_url);
         var productID = JSON.stringify(productsObject[i].product_id)
 
-        const item = new productGridItem(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, productDesc, productPhoto, productID, hoverDesc)
+        const item = new productGridItem(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, inputDesc, productPhoto, productID, productDesc)
 
         if(page == 'admin'){
             productsHTML = productsHTML.concat(' ', item.adminHTML);
