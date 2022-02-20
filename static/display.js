@@ -106,7 +106,6 @@ class productGridItem {
 
 }
 
-
 //runs on load and when called to pull data from server and display products
 function displayAll(page, sort){
     
