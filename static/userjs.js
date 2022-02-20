@@ -1,3 +1,7 @@
+
+displayAll('user');
+/*
+
 //runs on refresh/load to grab products from server
 var req = new XMLHttpRequest();
 var url = '/display';
@@ -31,6 +35,60 @@ function onLoad(x) {
         }
     }
 
+    class productGridItem {
+
+        constructor(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, productDesc, productPhoto, productID) {
+
+            this.name = productName;
+            this.nameNQ = productNameNoQuotes;
+            this.price = productPrice;
+            this.priceNQ = productPriceNoQuotes;
+            this.desc = productDesc;
+            this.photo = productPhoto;
+            this.id = productID;
+
+        }
+
+        get itemHTML() {
+            return this.generateHTML();
+        }
+
+        generateHTML(){
+
+            const itemHTML = `
+            <button type='button' style='background: url(${this.photo}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${this.id}'><span>${this.nameNQ}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${this.desc}</div><br>$${this.priceNQ}</div></span></button>
+    
+            <div class="modal fade" id='product${this.id}' tabindex="-1" role="dialog" aria-labelledby="viewProduct${this.id}" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">   
+                        <div class="modal-body User">
+                            <div class="container col-md-12 userModalContainer">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src=${this.photo} class='modalPhoto'>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn-close userBtnClose" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div>
+                                            <div class='modalProductName'>${this.nameNQ}</div>
+                                            <div class='modalProductDesc'>${this.desc}</div>
+                                            <div class='modalProductPrice'>$${this.priceNQ}</div>
+                                            <form method='post' class='addProductToCart' id='addProductToCart${this.id}'>
+                                                <button type="button" onclick=addToCart(${this.id}) class="btn btn-primary btnAddToCart" data-bs-dismiss="modal">Add to Cart</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+            return itemHTML;
+        }
+    }
+
     //parses object to create HTML to send to div
     productsHTML = ''
     for (let i = 0; i < productsObject.length; i++) {
@@ -47,36 +105,10 @@ function onLoad(x) {
         var productPhoto = JSON.stringify(productsObject[i].photo_url);
         var productID = JSON.stringify(productsObject[i].product_id)
 
-        productsHTML = productsHTML.concat(' ', `
-        <button type='button' style='background: url(${productPhoto}) no-repeat;' class='btn btn-light shadow product' data-bs-toggle='modal' data-bs-target='#product${productID}'><span>${productNameNoQuotes}<br><br><div class='hoverContent'><div class='hoverInnerDesc'>${productDesc}</div><br>$${productPriceNoQuotes}</div></span></button>
+        const item = new productGridItem(productName, productNameNoQuotes, productPrice, productPriceNoQuotes, productDesc, productPhoto, productID);
 
-        <div class="modal fade" id='product${productID}' tabindex="-1" role="dialog" aria-labelledby="viewProduct${productID}" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">   
-                    <div class="modal-body User">
-                        <div class="container col-md-12 userModalContainer">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <img src=${productPhoto} class='modalPhoto'>
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn-close userBtnClose" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    <div>
-                                        <div class='modalProductName'>${productNameNoQuotes}</div>
-                                        <div class='modalProductDesc'>${productDesc}</div>
-                                        <div class='modalProductPrice'>$${productPriceNoQuotes}</div>
-                                        <form method='post' class='addProductToCart' id='addProductToCart${productID}'>
-                                            <button type="button" onclick=addToCart(${productID}) class="btn btn-primary btnAddToCart" data-bs-dismiss="modal">Add to Cart</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `);
+        productsHTML = productsHTML.concat(' ', item.itemHTML)
+
     }
     
     document.getElementById('shopProducts').innerHTML = '';
@@ -88,6 +120,8 @@ function onError() {
     console.log('error receiving display AJAX call');
 }
     
+*/
+
 //checks if myCart item exists in localStorage, if not it initializes it
 if (localStorage.getItem("myCart") === null) {
     myCart=[];
@@ -95,6 +129,8 @@ if (localStorage.getItem("myCart") === null) {
 else if (localStorage.getItem("myCart") != null){
     myCart = JSON.parse(localStorage.getItem("myCart"));
 }
+
+
 
 function addToCart(id){
 

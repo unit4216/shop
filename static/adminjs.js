@@ -85,7 +85,7 @@ $(document).ready(function($) {
                     type: 'POST',
                     success: function(data){
                         console.log('AJAX edit success');
-                        displayAll();
+                        displayAll('admin');
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         console.log("AJAX edit error");
@@ -127,7 +127,7 @@ $(document).ready(function($) {
                     type: 'POST',
                     success: function(data){
                         console.log('AJAX add success');
-                        displayAll();
+                        displayAll('admin');
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         console.log("AJAX add error");
@@ -150,7 +150,7 @@ $(document).ready(function($) {
                 type: 'POST',
                 success: function(data){
                     console.log('AJAX delete success');
-                    displayAll();
+                    displayAll('admin');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     console.log("AJAX delete error");
@@ -169,8 +169,9 @@ $(document).ready(function($) {
     })
 });
 
-displayAll();
+displayAll('admin');
 
+/*
 //runs on load and when called to pull data from server and display products
 function displayAll(){
 
@@ -258,3 +259,5 @@ function onLoad() {
 function onError() {
     console.log('error receiving display AJAX call');
 }
+
+*/

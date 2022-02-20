@@ -19,6 +19,7 @@
         <script type= "text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <!--Script-->
+        <script type='text/javascript' src="display.js"></script>
         <script type='text/javascript' src="userjs.js"></script>
 
         <!--Moment.js-->
@@ -55,7 +56,7 @@
         </nav>
 
         <!--Filter select-->
-        <select class="form-select" onchange=onLoad(this.value) id='selectBox' aria-label="filterSelect">
+        <select class="form-select" onchange="displayAll('user',this.value)" id='selectBox' aria-label="filterSelect">
             <option selected>Sort by</option>
             <option value="1">Price High to Low</option>
             <option value="2">Price Low to High</option>
